@@ -1,0 +1,23 @@
+{
+  "name": "validish",
+  "version": "0.0.0",
+  "description": "Yet another validation framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dymonaz/validish.git"
+  },
+  "keywords": [
+    "validation",
+    "promises"
+  ],
+  "author": "Dominykas Blyžė <hello@dominykas.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dymonaz/validish/issues"
+  },
+  "homepage": "https://github.com/dymonaz/validish"
+}
