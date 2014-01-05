@@ -1,10 +1,10 @@
-# Validish #
+# Validish
 
 A framework[ish] to check if data is valid[ish]
 
 I didn't have time to look for one that satisfied all of my needs, so I wrote one for a project and extracted the code.
 
-= Requirements (where this is/was going)
+## Requirements (where this is/was going)
 
 * Parameterized messages / i18n
 * Validation context: other form data; user status
