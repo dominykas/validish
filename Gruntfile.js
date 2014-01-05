@@ -5,7 +5,7 @@ module.exports = function (grunt) {
 		buster: {
 			dist: {
 				test: {
-					reporter: "specification"
+//					reporter: "specification"
 				}
 			}
 		},

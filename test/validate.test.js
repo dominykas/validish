@@ -1,17 +1,14 @@
 var Q = require("q");
 var validish = require("../index.js");
 
-var testValidation = function (tc, obj, config, expectedErrors, done) {
+var testValidation = function (tc, obj, config, expectedErrors) {
 
-	validish
-		.validate(obj, config)
+	return validish.validate(obj, config)
 		.then(function (validationResult) {
 
 			expect(validationResult.errors).toEqual(expectedErrors);
 
 		})
-		.fail(tc.mock().never())
-		.fin(done).done();
 
 };
 
@@ -24,24 +21,21 @@ var alwaysPassValidator = function () {
 
 buster.testCase("validish.validate()", {
 
-	"empty config and empty object result in no errors": function (done) {
+	"empty config and empty object result in no errors": function () {
 
-		testValidation(this, {}, {}, null, done);
+		return testValidation(this, {}, {}, null);
 
 	},
 
-	"empty list of validators results in no errors": function (done) {
+	"empty list of validators results in no errors": function () {
 
-		validish.validate({}, {field: []})
+		return validish.validate({}, {field: []})
 			.then(function (res) {
 				expect(res.errors).toBeNull();
-			})
-			.fail(this.mock().never())
-			.fin(done)
-			.done();
+			});
 	},
 
-	"returns errors when validator fails": function (done) {
+	"returns errors when validator fails": function () {
 
 		var validatorSpy = this.spy(alwaysFailValidator);
 		var config = {
@@ -59,14 +53,14 @@ buster.testCase("validish.validate()", {
 			]
 		};
 
-		testValidation(this, {}, config, expectedErrors, function () {
-			expect(validatorSpy).toHaveBeenCalledOnce();
-			done();
-		});
+		return testValidation(this, {}, config, expectedErrors)
+			.then(function() {
+				expect(validatorSpy).toHaveBeenCalledOnce();
+			});
 
 	},
 
-	"no errors when validator passes": function (done) {
+	"no errors when validator passes": function () {
 
 		var validatorSpy = this.spy(alwaysPassValidator);
 
@@ -79,13 +73,13 @@ buster.testCase("validish.validate()", {
 			]
 		};
 
-		testValidation(this, {}, config, null, function () {
-			expect(validatorSpy).toHaveBeenCalledOnce();
-			done();
-		});
+		return testValidation(this, {}, config, null)
+			.then(function () {
+				expect(validatorSpy).toHaveBeenCalledOnce();
+			});
 	},
 
-	"multiple validators on one field (fail last)": function (done) {
+	"multiple validators on one field (fail last)": function () {
 
 		var passSpy = this.spy(alwaysPassValidator);
 		var failSpy = this.spy(alwaysFailValidator);
@@ -109,14 +103,14 @@ buster.testCase("validish.validate()", {
 			]
 		};
 
-		testValidation(this, {}, config, expectedErrors, function () {
-			expect(passSpy).toHaveBeenCalledOnce();
-			expect(failSpy).toHaveBeenCalledOnce();
-			done();
-		});
+		return testValidation(this, {}, config, expectedErrors)
+			.then(function () {
+				expect(passSpy).toHaveBeenCalledOnce();
+				expect(failSpy).toHaveBeenCalledOnce();
+			});
 	},
 
-	"multiple validators on one field (fail first - does not call pass)": function (done) {
+	"multiple validators on one field (fail first - does not call pass)": function () {
 
 		var passSpy = this.spy(alwaysPassValidator);
 		var failSpy = this.spy(alwaysFailValidator);
@@ -140,14 +134,14 @@ buster.testCase("validish.validate()", {
 			]
 		};
 
-		testValidation(this, {}, config, expectedErrors, function () {
-			expect(failSpy).toHaveBeenCalledOnce();
-			expect(passSpy).not.toHaveBeenCalled();
-			done();
-		});
+		return testValidation(this, {}, config, expectedErrors)
+			.then(function () {
+				expect(failSpy).toHaveBeenCalledOnce();
+				expect(passSpy).not.toHaveBeenCalled();
+			});
 	},
 
-	"should pass correct values and context into validators": function (done) {
+	"should pass correct values and context into validators": function () {
 
 		var validatorSpy = this.spy(alwaysPassValidator);
 
@@ -164,21 +158,22 @@ buster.testCase("validish.validate()", {
 			fieldName: "fieldValue"
 		};
 
-		testValidation(this, obj, config, null, function () {
-			expect(validatorSpy).toHaveBeenCalledOnce();
-			var withArgs = validatorSpy.getCall(0).args;
-			expect(withArgs[0]).toEqual("fieldValue");
+		return testValidation(this, obj, config, null)
+			.then(function () {
+				expect(validatorSpy).toHaveBeenCalledOnce();
+				var withArgs = validatorSpy.getCall(0).args;
+				expect(withArgs[0]).toEqual("fieldValue");
 
-			var withCtx = withArgs[1];
-			withCtx.get("fieldName").then(function (v) {
-				expect(v).toEqual("fieldValue");
-				done();
+				var withCtx = withArgs[1];
+				return withCtx.get("fieldName");
+			})
+			.then(function (actualValue) {
+				expect(actualValue).toEqual("fieldValue");
 			});
-		});
 
 	},
 
-	"multiple fields": function (done) {
+	"multiple fields": function () {
 
 		var validatorSpy = this.spy(alwaysPassValidator);
 
@@ -202,17 +197,17 @@ buster.testCase("validish.validate()", {
 			fieldTwo: "two"
 		};
 
-		testValidation(this, obj, config, null, function () {
-			expect(validatorSpy).toHaveBeenCalledWith("one");
-			expect(validatorSpy).toHaveBeenCalledWith("two");
-			done();
-		});
+		return testValidation(this, obj, config, null)
+			.then(function () {
+				expect(validatorSpy).toHaveBeenCalledWith("one");
+				expect(validatorSpy).toHaveBeenCalledWith("two");
+			});
 
 	},
 
 	"should accept results object from validator": {
 
-		"pass": function (done) {
+		"pass": function () {
 			var config = {
 				fieldName: [
 					{
@@ -224,12 +219,10 @@ buster.testCase("validish.validate()", {
 				]
 			};
 
-			testValidation(this, {}, config, null, function () {
-				done();
-			});
+			return testValidation(this, {}, config, null);
 		},
 
-		"fail with formats": function (done) {
+		"fail with formats": function () {
 
 			var config = {
 				fieldName: [
@@ -251,10 +244,9 @@ buster.testCase("validish.validate()", {
 				]
 			};
 
-			testValidation(this, {}, config, expectedErrors, function () {
-				done();
-			});
+			return testValidation(this, {}, config, expectedErrors);
 		}
 
 	}
+
 });
