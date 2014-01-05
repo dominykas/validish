@@ -1,2 +1,2 @@
-module.exports.validate = require("./lib/validish");
+module.exports.validate = require("./lib/validate");
 module.exports.validators = require("./lib/validators");

@@ -3,12 +3,17 @@ module.exports = function (grunt) {
 
 	grunt.initConfig({
 		buster: {
-			"dist": {
+			dist: {
+				test: {
+					reporter: "specification"
+				}
 			}
 		},
+
 		watch: {
-			"unit-tests": {
+			unitTests: {
 				files: [
+					"index.js",
 					"lib/**/*.js",
 					"lib/*.js",
 					"test/**/*.js",
@@ -17,6 +22,7 @@ module.exports = function (grunt) {
 				tasks: ["test"]
 			}
 		}
+
 	});
 
 	require('time-grunt')(grunt);
