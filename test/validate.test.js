@@ -1,6 +1,8 @@
 var Q = require("q");
 var validish = require("../index.js");
 
+var shouldFail = require("./testHelpers/expectValidateFailure");
+var shouldPass = require("./testHelpers/expectValidateSuccess");
 
 var testValidation = function (tc, obj, config, expectedErrors, done) {
 
@@ -14,40 +16,6 @@ var testValidation = function (tc, obj, config, expectedErrors, done) {
 		.fail(tc.mock().never())
 		.fin(done).done();
 
-};
-
-var testValidator = function (tc, validator, value, expectedSuccess, expectedFormats, done) {
-	return validish
-		.validate({field: value}, {field: [
-			{ validator: validator, errorMessage: "Validation failed" }
-		]})
-		.then(function (res) {
-			if (expectedSuccess) {
-				expect(res.errors).toBeNull("Expected validation to pass");
-			} else {
-				expect(res.errors).not.toBeNull("Expected errors to be set");
-				expect(res.errors.field.length).toEqual(1, "Expected validation failure");
-				expect(res.errors.field[0].errorMessage).toEqual("Validation failed", "Where's MY message?!");
-				if (expectedFormats) {
-					expect(res.errors.field[0].formats).toEqual(expectedFormats);
-				}
-			}
-		})
-		.fail(tc.mock().never())
-		.fin(done)
-		.done();
-};
-
-var shouldFail = function (validator, value, expectedFormats) {
-	return function shouldFail(done) {
-		testValidator(this, validator, value, false, expectedFormats, done);
-	}
-};
-
-var shouldPass = function (validator, value) {
-	return function shouldPass(done) {
-		testValidator(this, validator, value, true, null, done);
-	}
 };
 
 var alwaysFailValidator = function () {
