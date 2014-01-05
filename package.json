@@ -19,5 +19,13 @@
   "bugs": {
     "url": "https://github.com/dymonaz/validish/issues"
   },
-  "homepage": "https://github.com/dymonaz/validish"
+  "homepage": "https://github.com/dymonaz/validish",
+  "devDependencies": {
+    "grunt-buster": "~0.3.1",
+    "time-grunt": "~0.2.7",
+    "load-grunt-tasks": "~0.2.1",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt": "~0.4.2",
+    "buster": "~0.7.8"
+  }
 }
