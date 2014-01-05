@@ -1,9 +1,6 @@
 var Q = require("q");
 var validish = require("../index.js");
 
-var shouldFail = require("./testHelpers/expectValidateFailure");
-var shouldPass = require("./testHelpers/expectValidateSuccess");
-
 var testValidation = function (tc, obj, config, expectedErrors, done) {
 
 	validish
@@ -24,8 +21,6 @@ var alwaysFailValidator = function () {
 var alwaysPassValidator = function () {
 	return Q.resolve(true)
 };
-
-var validators = validish.validators;
 
 buster.testCase("validish.validate()", {
 
@@ -262,79 +257,4 @@ buster.testCase("validish.validate()", {
 		}
 
 	}
-});
-
-buster.testCase("validish.validators.required()", {
-
-	"fail when undefined": shouldFail(validators.required()),
-	"fail when null": shouldFail(validators.required(), null),
-	"fail when string is empty": shouldFail(validators.required(), ""),
-	"fail when string is spacey": shouldFail(validators.required(), " "),
-	"ok": shouldPass(validators.required(), "hello")
-
-});
-
-buster.testCase("validish.validators.maxLength(max)", {
-
-	"ok when undefined": shouldPass(validators.maxLength(100)),
-	"ok when null": shouldPass(validators.maxLength(100), null),
-	"ok when less than max": shouldPass(validators.maxLength(2), "x"),
-	"ok when equal to max": shouldPass(validators.maxLength(2), "xx"),
-	"fail when too long": shouldFail(validators.maxLength(2), "xxx", {max: 2}),
-	"fail when no max": shouldFail(validators.maxLength(), "x", {max: -1})
-
-});
-
-buster.testCase("validish.validators.minLength(min)", {
-
-	"fail when undefined": shouldFail(validators.minLength(2)),
-	"fail when null": shouldFail(validators.minLength(2), null),
-	"ok when equal to min": shouldPass(validators.minLength(3), "xxx"),
-	"ok when longer than min": shouldPass(validators.minLength(3), "xxxx"),
-	"fail when too short": shouldFail(validators.minLength(2), "x", {min: 2}),
-	"fail when no min": shouldFail(validators.minLength(), "x", {min: Infinity})
-
-});
-
-buster.testCase("validish.validators.matches(regexp)", {
-
-	"ok when matches": shouldPass(validators.matches(/./), "x"),
-	"fail when doesn't match": shouldFail(validators.matches(/^\w$/), "."),
-	"ok when doesn't match (invert)": shouldPass(validators.matches(/^\w$/, true), "."),
-	"fail when matches (invert)": shouldFail(validators.matches(/./, true), "x")
-
-});
-
-buster.testCase("validish.validators.oneOf(arg1, arg2, ...)", {
-
-	"fail when no list of values": shouldFail(validators.oneOf(), ""),
-	"pass when matches single arg": shouldPass(validators.oneOf("abc"), "abc"),
-	"pass when matches one of args": shouldPass(validators.oneOf("abc", "def"), "def"),
-	"fail when type mis-match": shouldFail(validators.oneOf(0, 1, 2), "2"),
-	"pass when type matches": shouldPass(validators.oneOf(0, 1, 2), 2)
-});
-
-buster.testCase("validish.validators.oneOf(array)", {
-
-	"pass when matches single arg": shouldPass(validators.oneOf(["abc"]), "abc"),
-	"pass when matches one of args": shouldPass(validators.oneOf(["abc", "def"]), "def"),
-	"fail when type mis-match": shouldFail(validators.oneOf([0, 1, 2]), "2"),
-	"pass when type matches": shouldPass(validators.oneOf([0, 1, 2]), 2)
-
-});
-
-buster.testCase("validish.validators.numeric()", {
-
-	"fail when undefined": shouldFail(validators.numeric()),
-	"fail when null": shouldFail(validators.numeric(), null),
-	"fail when NaN": shouldFail(validators.numeric(), "abc"),
-	"pass when null and empty allowed": shouldPass(validators.numeric({allowEmpty: true}), null, {allowEmpty: true}),
-	"pass when empty string and empty allowed": shouldPass(validators.numeric({allowEmpty: true}), "", {allowEmpty: true}),
-	"fail when less than min": shouldFail(validators.numeric({min: 10}), 5, {min: 10}),
-	"pass when more than min": shouldPass(validators.numeric({min: 10}), 15),
-	"pass when equal to min": shouldPass(validators.numeric({min: 10}), 10),
-	"fail when more than max": shouldFail(validators.numeric({max: 1}), 5, {max: 1}),
-	"pass when less than max": shouldPass(validators.numeric({max: 1}), 0),
-	"pass when equal to max": shouldPass(validators.numeric({max: 1}), 1)
-
 });
