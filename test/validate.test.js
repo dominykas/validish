@@ -54,7 +54,7 @@ buster.testCase("validish.validate()", {
 		};
 
 		return testValidation(this, {}, config, expectedErrors)
-			.then(function() {
+			.then(function () {
 				expect(validatorSpy).toHaveBeenCalledOnce();
 			});
 
@@ -203,6 +203,54 @@ buster.testCase("validish.validate()", {
 				expect(validatorSpy).toHaveBeenCalledWith("two");
 			});
 
+	},
+
+	"multiple errors on a field (no proceed)": function () {
+		var config = {
+			badField: [
+				{
+					validator: alwaysFailValidator,
+					errorMessage: "myErrors.one"
+				},
+				{
+					validator: alwaysFailValidator,
+					errorMessage: "myErrors.two"
+				}
+			]
+		};
+
+		var obj = {badField: "bad data"};
+
+		return testValidation(this, obj, config, {
+			badField: [
+				{errorMessage: "myErrors.one"}
+			]
+		});
+	},
+
+	"multiple errors on a field (proceed)": function () {
+		var config = {
+			badField: [
+				{
+					validator: alwaysFailValidator,
+					proceedIfInvalid: true,
+					errorMessage: "myErrors.one"
+				},
+				{
+					validator: alwaysFailValidator,
+					errorMessage: "myErrors.two"
+				}
+			]
+		};
+
+		var obj = {badField: "bad data"};
+
+		return testValidation(this, obj, config, {
+			badField: [
+				{errorMessage: "myErrors.one"},
+				{errorMessage: "myErrors.two"}
+			]
+		});
 	},
 
 	"should accept results object from validator": {

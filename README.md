@@ -4,18 +4,18 @@ A framework[ish] to check if data is valid[ish]
 
 I didn't have time to look for one that satisfied all of my needs, so I wrote one for a project and extracted the code.
 
-## Todo (P1)
+## Todo
 
-* Remove dependency on Q (replace with an optional dependency on ANY Promises/A+ lib)
-* Remove dependency on lodash
-* Hook up to the browser via browserify and via require.js
-* maxLength/minLength are really numeric
+* See issues
 
 ## Neverdo
 
 * Support IE8
 
 ## Requirements (where this is/was going)
+
+These don't mean the validish would support all of these features, not in the core anyways, however these are the things
+one needs to care about, when creating a project with a decent[ish] UX.
 
 * Parameterized messages / i18n
 * Validation context: other form data; user status
@@ -36,7 +36,8 @@ I didn't have time to look for one that satisfied all of my needs, so I wrote on
 
 ## Notes
 
-I currently have no idea what these scribbles were meant to be:
+I currently have no idea what these scribbles were meant to be, but they were there.
+
 * describe fields
 * describe generic validators for fields
 * inject specific validators for fields
