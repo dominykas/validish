@@ -14,7 +14,10 @@
     "validation",
     "promises"
   ],
-  "author": "Dominykas Blyžė <hello@dominykas.com>",
+  "contributors": [
+    "Dominykas Blyžė <hello@dominykas.com>",
+    "Šarūnas Davalga <sarunas@abneta.lt>"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/dymonaz/validish/issues"
