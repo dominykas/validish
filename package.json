@@ -1,6 +1,6 @@
 {
   "name": "validish",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Yet another validation framework",
   "main": "index.js",
   "scripts": {
