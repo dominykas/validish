@@ -25,14 +25,15 @@
   "homepage": "https://github.com/dymonaz/validish",
   "devDependencies": {
     "buster": "0.7.x",
+    "grunt": "0.4.x",
     "grunt-bump": "0.3.x",
     "grunt-buster": "0.3.x",
     "grunt-checkbranch": "1.x",
     "grunt-checkpending": "1.x",
-    "time-grunt": "1.x",
-    "load-grunt-tasks": "3.x",
+    "grunt-cli": "0.1.x",
     "grunt-contrib-watch": "0.6.x",
-    "grunt": "0.4.x"
+    "load-grunt-tasks": "3.x",
+    "time-grunt": "1.x"
   },
   "dependencies": {
     "q": "1.x"
