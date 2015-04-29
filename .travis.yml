@@ -1,0 +1,14 @@
+language: node_js
+node_js:
+  - "0.10"
+  - "0.12"
+  - "io.js"
+deploy:
+  - provider: npm
+    skip_cleanup: true
+    email: "hello@dominykas.com"
+    api_key:
+      secure: "iqFZr5jGvPsP5viy79dr0BbqIy63xRMz+5RR9h/Ir0aAZdUpahQ0sFFwBJjo5feLfZjxfAidjNwaF4P7EbLcHHDwc1/YO7P4GZrb//gRSy5ZquDCxZCapBNx3c97Rw9lxxlVhsIxxSd0iDGStA7u9jP6QoCf/UTscO+7N56npC0="
+    on:
+      tags: true
+      node_js: "io.js"
